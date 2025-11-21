@@ -10,7 +10,7 @@ def greet(request):
     return  HttpResponse("am unlucky in everything")
 
 
-@csrf_exempt
+'''@csrf_exempt
 def movies(request):
     if request.method=='POST':
         data=json.loads(request.body)
@@ -23,4 +23,4 @@ def movies(request):
             rating=rating_num
         )
         return  JsonResponse({"status":"success","id":movie.id,"movie_name":movie.movie_name,"rating_stars":rating_stars},status=200) 
-    return JsonResponse({"error":"error occured"})
+    return JsonResponse({"error":"error occured"})'''

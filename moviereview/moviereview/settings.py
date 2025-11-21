@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_5w!3vyo3$^h9ymyf=35ik6ha1i(iqw&f_&+htd3w-w&0s+i*3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ["https://dijango-levleone.onrender.com"]
 
 
