@@ -7,3 +7,4 @@ class movie_details(models.Model):
       release_date=models.CharField(max_length=100)
       budget=models.CharField(max_length=100)
       rating=models.IntegerField()
+    
