@@ -231,8 +231,19 @@ def movies(request):
     if request.method == "GET":
         Movie_info = movie_details.objects.all()
         movie_list = []
-
+        rating_filter=request.GET.get("rating")
+        max_budget_filter=request.GET.get("max_budget")
+        min_budget_filter=request.GET.get("min_budget")
+        if rating_filter:
+            Movie_info=Movie_info.filter(rating__gt=float(rating_filter))
         for movie in Movie_info:
+            if min_budget_filter or max_budget_filter:
+                budget_str=movie.budget.lower().replace("cr","")
+                budget_value=float(budget_str)
+                if min_budget_filter and budget_value<=float(min_budget_filter):
+                    continue
+                if max_budget_filter and budget_value>=float(max_budget_filter):
+                    continue
             movie_list.append({
                 "id": movie.id,
                 "movie_name": movie.movie_name,
@@ -241,7 +252,8 @@ def movies(request):
                 "rating": movie.rating,
                 "stars": "⭐" * int(movie.rating)
             })
-
+            if len(movie_list)==0:
+                return JsonResponse({"status":"successs","message":"no movies found matching the criteria"},status=200)
         return JsonResponse({"status": "success", "data": movie_list}, status=200)
 
     # ⭐---------- CREATE MOVIE ----------
@@ -336,42 +348,40 @@ def movies(request):
 
 
 
-@csrf_exempt
-def movies(request):
+# @csrf_exempt
+# def movies(request):
 
-    if request.method == "GET":
+#     if request.method == "GET":
 
-        movie_info = movie_details.objects.all()
+#         movie_info = movie_details.objects.all()
+#         rating_more_than_4 = []
+#         budget_between_25_45 = []
 
-        rating_more_than_4 = []
-        budget_between_25_45 = []
+#         for m in movie_info:
+#             # convert “30cr” → 30
+#             budget_value = int(str(m.budget).replace("cr", ""))
 
-        for m in movie_info:
+#             # -------- Task 1 --------
+#             if m.rating > 4:
+#                 rating_more_than_4.append({
+#                     "movie_name": m.movie_name,
+#                     "rating": m.rating,
+#                     # "budget": m.budget,
+#                 })
 
-            # convert “30cr” → 30
-            budget_value = int(str(m.budget).replace("cr", ""))
+#             # -------- Task 2 --------
+#             if 25 < budget_value <45:
+#                 budget_between_25_45.append({
+#                     "movie_name": m.movie_name,
+#                     # "rating": m.rating,
+#                     "budget": m.budget,
+#                 })
 
-            # -------- Task 1 --------
-            if m.rating > 4:
-                rating_more_than_4.append({
-                    "movie_name": m.movie_name,
-                    "rating": m.rating,
-                    # "budget": m.budget,
-                })
-
-            # -------- Task 2 --------
-            if 25 < budget_value <45:
-                budget_between_25_45.append({
-                    "movie_name": m.movie_name,
-                    # "rating": m.rating,
-                    "budget": m.budget,
-                })
-
-        return JsonResponse({
-            "status": "success",
-            "rating_more_than_4": rating_more_than_4,
-            "budget_between_25_and_45": budget_between_25_45
-        })
+#         return JsonResponse({
+#             "status": "success",
+#             "rating_more_than_4": rating_more_than_4,
+#             "budget_between_25_and_45": budget_between_25_45
+#         })
 
 
 
